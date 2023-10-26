@@ -1,21 +1,9 @@
-import { useState } from 'react'
 import confetti from 'canvas-confetti'
+import { useState } from 'react'
+import { Square } from './components/Square'
+import { TURN, WINNERS } from './const/const'
 
 export const App = () => {
-  const TURN = {
-    x: '❌',
-    o: '⭕️',
-  }
-  const WINNERS = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ]
   const initialBoard = Array(9).fill('')
   const [turn, setTurn] = useState(TURN.x)
   const [board, setBoard] = useState(initialBoard)
@@ -23,7 +11,11 @@ export const App = () => {
   const checkWinner = (newBoard) => {
     for (const winner of WINNERS) {
       const [a, b, c] = winner
-      if (newBoard[a] && newBoard[a] === newBoard[b] && newBoard[a] === newBoard[c]) {
+      if (
+        newBoard[a] &&
+        newBoard[a] === newBoard[b] &&
+        newBoard[a] === newBoard[c]
+      ) {
         setWinner(newBoard[a])
         confetti()
       }
@@ -44,14 +36,16 @@ export const App = () => {
   }
   return (
     <>
-      <h1>Tic tac toe</h1>
+      <h1 className='pt-10'>Tic tac toe</h1>
       <div className="board">
         <div className="game">
-          {board.map((e, i) => (
-            <div key={i} className="square" onClick={() => updateBoard(i)}>
-              {e}
-            </div>
-          ))}
+          {
+            board.map((e, i) => (
+              <Square key={i} updateBoard={updateBoard} i={i}>
+                {e}
+              </Square>
+            ))
+          }
         </div>
       </div>
       <h1>Winner : {winner}</h1>
